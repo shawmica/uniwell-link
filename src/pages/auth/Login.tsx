@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch } from '@/store/hooks';
-import { setUser } from '@/store/userSlice';
+import { setUser, UserRole } from '@/store/userSlice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { GraduationCap } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<UserRole>('student');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -25,7 +27,7 @@ export default function Login() {
         id: '1',
         email,
         name: 'John Doe',
-        role: 'student' as const,
+        role: role as UserRole,
         department: 'Computer Science',
         avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
       };
@@ -102,6 +104,22 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+            </div>
+
+            {/* Role Selection (for demo/testing) */}
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <Select value={role} onValueChange={(value: UserRole) => setRole(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="tutor">Tutor</SelectItem>
+                  <SelectItem value="hostel_owner">Hostel Owner</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
