@@ -3,6 +3,7 @@ import { useAppSelector } from '@/store/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Users, Home as HomeIcon, FileText, AlertCircle, TrendingUp, UserCheck, Shield, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -39,17 +40,35 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
           <h1 className="font-heading text-3xl font-bold mb-2">
             {t('dashboard.welcome')}, {currentUser?.name?.split(' ')[0] || 'Admin'}! 🛡️
           </h1>
           <p className="text-muted-foreground">System overview and administrative controls</p>
+          <Badge variant="outline" className="text-destructive border-destructive mt-2">
+            <AlertCircle className="mr-1 h-3 w-3" />
+            {recentActivity.filter((a) => a.status === 'urgent' || a.status === 'pending').length} Pending Actions
+          </Badge>
         </div>
-        <Badge variant="outline" className="text-destructive border-destructive">
-          <AlertCircle className="mr-1 h-3 w-3" />
-          {recentActivity.filter((a) => a.status === 'urgent' || a.status === 'pending').length} Pending Actions
-        </Badge>
+        
+        {/* Profile Section */}
+        <Card className="w-64 border-primary">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-12 w-12">
+                <AvatarFallback className="bg-primary/20 text-primary font-semibold">
+                  {currentUser?.name?.charAt(0) || 'A'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold truncate">{currentUser?.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
+                <Badge className="mt-1 text-xs bg-primary">Administrator</Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Stats Grid */}

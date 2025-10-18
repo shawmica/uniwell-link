@@ -2,7 +2,10 @@ import { useAppSelector } from '@/store/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, Users, Home as HomeIcon, Heart, TrendingUp, BookOpen, Calendar, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const stats = [
   { icon: Brain, label: 'AI Sessions', value: '12', change: '+3 this week', color: 'text-secondary' },
@@ -24,16 +27,37 @@ const aiTips = [
 ];
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
-      <div>
-        <h1 className="font-heading text-3xl font-bold mb-2">
-          Welcome back, {currentUser?.name?.split(' ')[0] || 'Student'}! 👋
-        </h1>
-        <p className="text-muted-foreground">Here's what's happening with your campus life today.</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-heading text-3xl font-bold mb-2">
+            {t('dashboard.welcome')}, {currentUser?.name?.split(' ')[0] || 'Student'}! 👋
+          </h1>
+          <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
+        </div>
+        
+        {/* Profile Section */}
+        <Card className="w-64">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-12 w-12">
+                <AvatarFallback className="bg-secondary/20 text-secondary font-semibold">
+                  {currentUser?.name?.charAt(0) || 'U'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold truncate">{currentUser?.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
+                <Badge variant="outline" className="mt-1 text-xs capitalize">{currentUser?.role}</Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Stats Grid */}

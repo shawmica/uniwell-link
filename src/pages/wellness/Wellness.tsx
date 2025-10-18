@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Heart, Smile, Meh, Frown, BookHeart, MessageCircle, AlertCircle, TrendingUp } from 'lucide-react';
+import { Heart, Smile, Meh, Frown, BookHeart, MessageCircle, AlertCircle, TrendingUp, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { addJournalEntry, deleteJournalEntry } from '@/store/journalSlice';
 
 const moodOptions = [
   { icon: '😊', label: 'Great', value: 5, color: 'text-success' },
@@ -28,27 +30,57 @@ const journalEntries = [
 ];
 
 export default function Wellness() {
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.user.currentUser);
+  const journalEntries = useAppSelector((state) => state.journal.entries);
+  const userEntries = journalEntries.filter(entry => entry.userId === currentUser?.email);
+  
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [journalText, setJournalText] = useState('');
   const [chatMessage, setChatMessage] = useState('');
   const [todaysAffirmation] = useState(affirmations[Math.floor(Math.random() * affirmations.length)]);
 
   const logMood = () => {
-    if (selectedMood === null) {
+    if (selectedMood === null || !currentUser) {
       toast.error('Please select a mood first');
       return;
     }
+    
+    const newEntry = {
+      id: Date.now().toString(),
+      date: new Date().toISOString().split('T')[0],
+      mood: selectedMood,
+      entry: `Mood logged: ${moodOptions.find(m => m.value === selectedMood)?.label}`,
+      userId: currentUser.email,
+    };
+    
+    dispatch(addJournalEntry(newEntry));
     toast.success('Mood logged successfully!');
     setSelectedMood(null);
   };
 
   const saveJournal = () => {
-    if (!journalText.trim()) {
+    if (!journalText.trim() || !currentUser) {
       toast.error('Please write something in your journal');
       return;
     }
+    
+    const newEntry = {
+      id: Date.now().toString(),
+      date: new Date().toISOString().split('T')[0],
+      mood: selectedMood || 3,
+      entry: journalText,
+      userId: currentUser.email,
+    };
+    
+    dispatch(addJournalEntry(newEntry));
     toast.success('Journal entry saved!');
     setJournalText('');
+  };
+
+  const handleDeleteEntry = (entryId: string) => {
+    dispatch(deleteJournalEntry(entryId));
+    toast.success('Journal entry deleted!');
   };
 
   return (
@@ -130,17 +162,29 @@ export default function Wellness() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {journalEntries.map((entry, index) => (
-                  <div key={index} className="flex items-start gap-4 rounded-lg border border-border p-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl">
-                      {moodOptions.find((m) => m.value === entry.mood)?.icon}
+                {userEntries.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">No mood entries yet. Start tracking!</p>
+                ) : (
+                  userEntries.slice(0, 5).map((entry) => (
+                    <div key={entry.id} className="flex items-start gap-4 rounded-lg border border-border p-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl">
+                        {moodOptions.find((m) => m.value === entry.mood)?.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-muted-foreground mb-1">{entry.date}</p>
+                        <p className="text-sm">{entry.entry}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleDeleteEntry(entry.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-muted-foreground mb-1">{entry.date}</p>
-                      <p className="text-sm">{entry.entry}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -170,17 +214,29 @@ export default function Wellness() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {journalEntries.map((entry, index) => (
-                  <div key={index} className="rounded-lg border border-border p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm font-medium">{entry.date}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{moodOptions.find((m) => m.value === entry.mood)?.icon}</span>
+                {userEntries.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">No journal entries yet. Start writing!</p>
+                ) : (
+                  userEntries.map((entry) => (
+                    <div key={entry.id} className="rounded-lg border border-border p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm font-medium">{entry.date}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl">{moodOptions.find((m) => m.value === entry.mood)?.icon}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8"
+                            onClick={() => handleDeleteEntry(entry.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
+                      <p className="text-sm text-muted-foreground">{entry.entry}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">{entry.entry}</p>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>

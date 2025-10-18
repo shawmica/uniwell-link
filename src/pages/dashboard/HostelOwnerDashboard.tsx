@@ -3,6 +3,7 @@ import { useAppSelector } from '@/store/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Home as HomeIcon, Users, DollarSign, TrendingUp, Calendar, Star, Plus, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -58,19 +59,37 @@ export default function HostelOwnerDashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
           <h1 className="font-heading text-3xl font-bold mb-2">
             {t('dashboard.welcome')}, {currentUser?.name?.split(' ')[0] || 'Owner'}! 🏠
           </h1>
           <p className="text-muted-foreground">Manage your hostel properties and bookings</p>
         </div>
-        <Button asChild>
-          <Link to="/dashboard/hostels">
-            <Plus className="mr-2 h-4 w-4" />
-            Add New Hostel
-          </Link>
-        </Button>
+        
+        {/* Profile Section */}
+        <Card className="w-64">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <Avatar className="h-12 w-12">
+                <AvatarFallback className="bg-secondary/20 text-secondary font-semibold">
+                  {currentUser?.name?.charAt(0) || 'O'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold truncate">{currentUser?.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
+                <Badge variant="outline" className="mt-1 text-xs">Owner</Badge>
+              </div>
+            </div>
+            <Button size="sm" className="w-full" asChild>
+              <Link to="/dashboard/hostels">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Hostel
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Stats Grid */}

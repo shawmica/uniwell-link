@@ -32,11 +32,35 @@ export default function TutorDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-heading text-3xl font-bold mb-2">
-          {t('dashboard.welcome')}, {currentUser?.name?.split(' ')[0] || 'Tutor'}! 👨‍🏫
-        </h1>
-        <p className="text-muted-foreground">Manage your tutoring sessions and connect with students</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-heading text-3xl font-bold mb-2">
+            {t('dashboard.welcome')}, {currentUser?.name?.split(' ')[0] || 'Tutor'}! 👨‍🏫
+          </h1>
+          <p className="text-muted-foreground">Manage your tutoring sessions and connect with students</p>
+        </div>
+        
+        {/* Profile Section */}
+        <Card className="w-64">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-12 w-12">
+                <AvatarFallback className="bg-secondary/20 text-secondary font-semibold">
+                  {currentUser?.name?.charAt(0) || 'T'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold truncate">{currentUser?.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <Star className="h-3 w-3 fill-warning text-warning" />
+                  <span className="text-xs font-semibold">4.8</span>
+                  <Badge variant="outline" className="text-xs ml-1">Tutor</Badge>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Stats Grid */}

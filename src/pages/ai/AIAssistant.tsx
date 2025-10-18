@@ -3,8 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Upload, FileText, Sparkles, BookOpen, MessageSquare, Calendar } from 'lucide-react';
+import { Upload, FileText, Sparkles, BookOpen, MessageSquare, Calendar, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { addNote, deleteNote } from '@/store/notesSlice';
+import { Badge } from '@/components/ui/badge';
 
 const mockSummary = `
 # Introduction to Data Structures
@@ -41,6 +44,11 @@ const mockQuiz = [
 ];
 
 export default function AIAssistant() {
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.user.currentUser);
+  const notes = useAppSelector((state) => state.notes.notes);
+  const userNotes = notes.filter(note => note.userId === currentUser?.email);
+  
   const [file, setFile] = useState<File | null>(null);
   const [processing, setProcessing] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -57,11 +65,29 @@ export default function AIAssistant() {
   };
 
   const processFile = () => {
+    if (!file || !currentUser) return;
+    
     setProcessing(true);
     setTimeout(() => {
+      const newNote = {
+        id: Date.now().toString(),
+        title: file.name.replace(/\.[^/.]+$/, ''),
+        content: mockSummary,
+        fileName: file.name,
+        uploadDate: new Date().toISOString(),
+        userId: currentUser.email,
+      };
+      
+      dispatch(addNote(newNote));
       setProcessing(false);
-      toast.success('AI processing complete!');
+      setFile(null);
+      toast.success('AI processing complete! Note saved.');
     }, 2000);
+  };
+
+  const handleDeleteNote = (noteId: string) => {
+    dispatch(deleteNote(noteId));
+    toast.success('Note deleted successfully!');
   };
 
   const sendChatMessage = () => {
@@ -117,6 +143,40 @@ export default function AIAssistant() {
           </div>
         </CardContent>
       </Card>
+
+      {/* My Notes Section */}
+      {userNotes.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>My Uploaded Notes ({userNotes.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {userNotes.map((note) => (
+                <div key={note.id} className="rounded-lg border border-border p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">{note.title}</h3>
+                      <p className="text-xs text-muted-foreground">{note.fileName}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => handleDeleteNote(note.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {new Date(note.uploadDate).toLocaleDateString()}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* AI Features Tabs */}
       <Tabs defaultValue="summary" className="w-full">
