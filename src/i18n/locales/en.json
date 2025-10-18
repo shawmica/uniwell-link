@@ -1,0 +1,133 @@
+{
+  "app": {
+    "name": "CampusEase",
+    "tagline": "Smart Campus Companion"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "aiAssistant": "AI Assistant",
+    "peerLearning": "Peer Learning",
+    "hostelFinder": "Hostel Finder",
+    "wellness": "Wellness Zone",
+    "messages": "Messages",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "role": "I am a",
+    "student": "Student",
+    "tutor": "Tutor",
+    "hostelOwner": "Hostel Owner",
+    "admin": "Admin",
+    "createAccount": "Create account",
+    "signIn": "Sign in",
+    "forgotPassword": "Forgot password?",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "welcomeBack": "Welcome back",
+    "createYourAccount": "Create your account"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "stats": {
+      "aiSessions": "AI Sessions",
+      "studyPartners": "Study Partners",
+      "savedHostels": "Saved Hostels",
+      "wellnessScore": "Wellness Score",
+      "students": "Students",
+      "earnings": "Earnings",
+      "rating": "Rating",
+      "hostels": "Hostels",
+      "bookings": "Bookings",
+      "occupancy": "Occupancy",
+      "users": "Users",
+      "reports": "Reports"
+    },
+    "upcomingSessions": "Upcoming Study Sessions",
+    "aiInsights": "AI Insights for You",
+    "quickActions": "Quick Actions",
+    "uploadNotes": "Upload Notes",
+    "findTutor": "Find Tutor",
+    "browseHostels": "Browse Hostels",
+    "logMood": "Log Mood"
+  },
+  "ai": {
+    "title": "AI Study Assistant",
+    "subtitle": "Upload notes, get summaries, flashcards, and quiz yourself with AI",
+    "upload": "Upload Study Material",
+    "uploadDesc": "Upload PDF, images, or documents. AI will analyze and create study materials.",
+    "chooseFile": "Choose File",
+    "process": "Process with AI",
+    "summary": "Summary",
+    "flashcards": "Flashcards",
+    "quiz": "Quiz",
+    "chat": "Chat",
+    "chatWithAI": "Chat with AI Tutor"
+  },
+  "peer": {
+    "title": "Peer Learning & Tutoring",
+    "subtitle": "Connect with tutors and study partners to accelerate your learning",
+    "search": "Search by name or subject...",
+    "filter": "Filter by subject",
+    "allSubjects": "All Subjects",
+    "available": "Available now",
+    "busy": "Busy",
+    "message": "Message",
+    "sessions": "sessions",
+    "rating": "Rating"
+  },
+  "hostel": {
+    "title": "Hostel & Roommate Finder",
+    "subtitle": "Find your perfect accommodation and compatible roommates",
+    "browseHostels": "Browse Hostels",
+    "findRoommates": "Find Roommates",
+    "search": "Search by location or name...",
+    "priceRange": "Price Range",
+    "gender": "Gender",
+    "available": "Available",
+    "rooms": "rooms",
+    "startingFrom": "Starting from",
+    "perMonth": "per month",
+    "viewDetails": "View Details",
+    "compatibility": "Match"
+  },
+  "wellness": {
+    "title": "Wellness Zone",
+    "subtitle": "Take care of your mental health and emotional wellbeing",
+    "affirmation": "Your Daily Affirmation",
+    "moodTracker": "Mood Tracker",
+    "journal": "Journal",
+    "counselor": "AI Counselor",
+    "howFeeling": "How are you feeling today?",
+    "logMood": "Log Mood",
+    "needHelp": "Need Immediate Help?"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account settings and preferences",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "appearance": "Appearance",
+    "security": "Security",
+    "saveChanges": "Save Changes",
+    "language": "Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "send": "Send",
+    "close": "Close"
+  }
+}

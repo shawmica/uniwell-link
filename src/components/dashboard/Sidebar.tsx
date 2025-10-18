@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
@@ -14,18 +15,20 @@ import {
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-  { icon: Brain, label: 'AI Assistant', path: '/dashboard/ai-assistant' },
-  { icon: Users, label: 'Peer Learning', path: '/dashboard/peer-learning' },
-  { icon: HomeIcon, label: 'Hostel Finder', path: '/dashboard/hostels' },
-  { icon: Heart, label: 'Wellness Zone', path: '/dashboard/wellness' },
-  { icon: MessageSquare, label: 'Messages', path: '/dashboard/messages' },
-  { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', key: 'dashboard' },
+  { icon: Brain, label: 'AI Assistant', path: '/dashboard/ai-assistant', key: 'aiassistant' },
+  { icon: Users, label: 'Peer Learning', path: '/dashboard/peer-learning', key: 'peerlearning' },
+  { icon: HomeIcon, label: 'Hostel Finder', path: '/dashboard/hostels', key: 'hostelfinder' },
+  { icon: Heart, label: 'Wellness Zone', path: '/dashboard/wellness', key: 'wellness' },
+  { icon: MessageSquare, label: 'Messages', path: '/dashboard/messages', key: 'messages' },
+  { icon: Settings, label: 'Settings', path: '/dashboard/settings', key: 'settings' },
 ];
 
 export const Sidebar = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const currentUser = useAppSelector((state) => state.user.currentUser);
@@ -45,7 +48,10 @@ export const Sidebar = () => {
             <div className="rounded-xl bg-primary p-2">
               <GraduationCap className="h-6 w-6 text-white" />
             </div>
-            <span className="font-heading text-xl font-bold">CampusEase</span>
+            <span className="font-heading text-xl font-bold">{t('app.name')}</span>
+          </div>
+          <div className="mt-4">
+            <LanguageSwitcher />
           </div>
         </div>
 
@@ -63,10 +69,10 @@ export const Sidebar = () => {
                     : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
                 )
               }
-            >
-              <item.icon className="h-5 w-5" />
-              {item.label}
-            </NavLink>
+              >
+                <item.icon className="h-5 w-5" />
+                {t(`nav.${item.key}`)}
+              </NavLink>
           ))}
         </nav>
 
@@ -88,7 +94,7 @@ export const Sidebar = () => {
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
           >
             <LogOut className="h-5 w-5" />
-            Logout
+            {t('nav.logout')}
           </button>
         </div>
       </div>

@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import { store } from "./store/store";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { setUser, setLoading } from "./store/userSlice";
+import './i18n/config';
 
 // Pages
 import Index from "./pages/Index";
@@ -16,6 +17,9 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/dashboard/Dashboard";
+import TutorDashboard from "./pages/dashboard/TutorDashboard";
+import HostelOwnerDashboard from "./pages/dashboard/HostelOwnerDashboard";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import AIAssistant from "./pages/ai/AIAssistant";
 import PeerLearning from "./pages/peer/PeerLearning";
 import Hostels from "./pages/hostel/Hostels";
@@ -31,7 +35,7 @@ const queryClient = new QueryClient();
 
 function AppRoutes() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.user);
+  const { isAuthenticated, currentUser } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     // Check for existing user session
@@ -45,6 +49,24 @@ function AppRoutes() {
     }
     dispatch(setLoading(false));
   }, [dispatch]);
+
+  // Determine which dashboard to show based on role
+  const getDashboardComponent = () => {
+    if (!currentUser) return Dashboard;
+    
+    switch (currentUser.role) {
+      case 'tutor':
+        return TutorDashboard;
+      case 'hostel_owner':
+        return HostelOwnerDashboard;
+      case 'admin':
+        return AdminDashboard;
+      default:
+        return Dashboard;
+    }
+  };
+
+  const DashboardComponent = getDashboardComponent();
 
   return (
     <Routes>
@@ -62,7 +84,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
-        <Route index element={<Dashboard />} />
+        <Route index element={<DashboardComponent />} />
         <Route path="ai-assistant" element={<AIAssistant />} />
         <Route path="peer-learning" element={<PeerLearning />} />
         <Route path="hostels" element={<Hostels />} />
