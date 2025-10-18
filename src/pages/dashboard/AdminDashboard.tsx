@@ -38,6 +38,9 @@ export default function AdminDashboard() {
   const { t } = useTranslation();
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
+  // Debug: Log current user role
+  console.log('Admin Dashboard - Current User:', currentUser);
+
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between gap-4">
@@ -53,18 +56,18 @@ export default function AdminDashboard() {
         </div>
         
         {/* Profile Section */}
-        <Card className="w-64 border-primary">
+        <Card className="w-64 border-primary shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-12 w-12">
-                <AvatarFallback className="bg-primary/20 text-primary font-semibold">
+              <Avatar className="h-12 w-12 border-2 border-primary">
+                <AvatarFallback className="bg-primary/20 text-primary font-semibold text-lg">
                   {currentUser?.name?.charAt(0) || 'A'}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold truncate">{currentUser?.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
-                <Badge className="mt-1 text-xs bg-primary">Administrator</Badge>
+                <Badge className="mt-1 text-xs bg-primary">Admin Dashboard</Badge>
               </div>
             </div>
           </CardContent>

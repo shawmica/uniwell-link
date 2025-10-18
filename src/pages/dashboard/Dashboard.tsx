@@ -6,12 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { QuickRoleSwitcher } from '@/components/dashboard/QuickRoleSwitcher';
 
 const stats = [
-  { icon: Brain, label: 'AI Sessions', value: '12', change: '+3 this week', color: 'text-secondary' },
-  { icon: Users, label: 'Study Partners', value: '8', change: '2 new connections', color: 'text-accent' },
-  { icon: HomeIcon, label: 'Saved Hostels', value: '5', change: '3 new listings', color: 'text-warning' },
-  { icon: Heart, label: 'Wellness Score', value: '85%', change: '+5% this week', color: 'text-success' },
+  { icon: Brain, label: 'aiSessions', value: '12', change: '+3 this week', color: 'text-secondary' },
+  { icon: Users, label: 'studyPartners', value: '8', change: '2 new connections', color: 'text-accent' },
+  { icon: HomeIcon, label: 'savedHostels', value: '5', change: '3 new listings', color: 'text-warning' },
+  { icon: Heart, label: 'wellnessScore', value: '85%', change: '+5% this week', color: 'text-success' },
 ];
 
 const upcomingSessions = [
@@ -30,8 +31,14 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
+  // Debug: Log current user role
+  console.log('Student Dashboard - Current User:', currentUser);
+
   return (
     <div className="space-y-8">
+      {/* Developer Tool */}
+      <QuickRoleSwitcher />
+      
       {/* Welcome Header */}
       <div className="flex items-start justify-between">
         <div>
@@ -42,18 +49,18 @@ export default function Dashboard() {
         </div>
         
         {/* Profile Section */}
-        <Card className="w-64">
+        <Card className="w-64 border-accent">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <Avatar className="h-12 w-12">
-                <AvatarFallback className="bg-secondary/20 text-secondary font-semibold">
-                  {currentUser?.name?.charAt(0) || 'U'}
+                <AvatarFallback className="bg-accent/20 text-accent font-semibold">
+                  {currentUser?.name?.charAt(0) || 'S'}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold truncate">{currentUser?.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
-                <Badge variant="outline" className="mt-1 text-xs capitalize">{currentUser?.role}</Badge>
+                <Badge className="mt-1 text-xs bg-accent">Student Dashboard</Badge>
               </div>
             </div>
           </CardContent>
@@ -71,7 +78,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t(`dashboard.stats.${stat.label}`)}</p>
                 <p className="font-heading text-3xl font-bold mb-1">{stat.value}</p>
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />

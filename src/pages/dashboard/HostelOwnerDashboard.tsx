@@ -57,6 +57,9 @@ export default function HostelOwnerDashboard() {
   const { t } = useTranslation();
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
+  // Debug: Log current user role
+  console.log('Hostel Owner Dashboard - Current User:', currentUser);
+
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between gap-4">
@@ -68,18 +71,18 @@ export default function HostelOwnerDashboard() {
         </div>
         
         {/* Profile Section */}
-        <Card className="w-64">
+        <Card className="w-64 border-warning">
           <CardContent className="p-4">
             <div className="flex items-center gap-3 mb-3">
               <Avatar className="h-12 w-12">
-                <AvatarFallback className="bg-secondary/20 text-secondary font-semibold">
+                <AvatarFallback className="bg-warning/20 text-warning font-semibold">
                   {currentUser?.name?.charAt(0) || 'O'}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold truncate">{currentUser?.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>
-                <Badge variant="outline" className="mt-1 text-xs">Owner</Badge>
+                <Badge className="mt-1 text-xs bg-warning">Owner Dashboard</Badge>
               </div>
             </div>
             <Button size="sm" className="w-full" asChild>

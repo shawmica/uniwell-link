@@ -30,6 +30,9 @@ export default function TutorDashboard() {
   const { t } = useTranslation();
   const currentUser = useAppSelector((state) => state.user.currentUser);
 
+  // Debug: Log current user role
+  console.log('Tutor Dashboard - Current User:', currentUser);
+
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between">
@@ -41,7 +44,7 @@ export default function TutorDashboard() {
         </div>
         
         {/* Profile Section */}
-        <Card className="w-64">
+        <Card className="w-64 border-secondary">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <Avatar className="h-12 w-12">
@@ -55,7 +58,7 @@ export default function TutorDashboard() {
                 <div className="flex items-center gap-1 mt-1">
                   <Star className="h-3 w-3 fill-warning text-warning" />
                   <span className="text-xs font-semibold">4.8</span>
-                  <Badge variant="outline" className="text-xs ml-1">Tutor</Badge>
+                  <Badge className="text-xs ml-1 bg-secondary">Tutor Dashboard</Badge>
                 </div>
               </div>
             </div>
